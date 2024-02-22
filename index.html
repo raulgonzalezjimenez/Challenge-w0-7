@@ -1,33 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="module" src="index.js"></script>
-    <link rel="stylesheet" href="estilo.css" />
-    <title>GAME</title>
+    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
+    <link rel="stylesheet" href="./estilo.css" />
+    <script type="module" src="./index.js" defer></script>
+    <title>Cartas</title>
   </head>
   <body>
-    <section class="initial">
-      <h1><i>HIGH OR LOW </i></h1>
-      <img
-        width="150px"
-        src="https://www.shutterstock.com/image-illustration/poker-playing-card-suit-clover-600nw-2164535053.jpg"
-        alt="Poker"
-      />
+    <header>
+      <h1>Adivina la carta</h1>
+    </header>
+    <section>
+      <p>Bienvenido a nuestro juego de cartas! ♥ ♦ ♣ ♠.</p>
+      <form class="form1">
+        <input
+          type="text"
+          name="username"
+          placeholder="Inserta tu usuario!"
+          required
+        />
+        <button type="submit">Empezar</button>
+      </form>
+    </section>
+    <section hidden>
+      <p>
+        Hola <span class="username">...</span>, bienvenido a nuestro juego de
+        cartas! ♥ ♦ ♣ ♠.
+      </p>
       <p>
         Estas son las reglas: se te asignara una carta y Tienes que adivinar si
-        la siguente es mayor o menor de la que tienes.
+        la siguiente es mayor o menor de la que tienes.
       </p>
       <p>
-        Los valores desde el mas grande al mas pequeño van de: A, K, Q, J, 10,
-        9, 8 , 7, 6, 5, 4, 3, 2.
+        Los valore desde el mas grande al mas pequeño van <br />
+        A, K, Q, J, 10, 9, 8, 7, 6, 5, 4, 3, 2.
       </p>
-      <p>♥Corazones ♦ Diamantes ♣ Tréboles ♠ Espadas</p>
-      <label for="nombre">
-        <input type="text" placeholder="Username" required />
-      </label>
-      <button click="game()">PLAY</button>
+      <p>♥ Corazones ♦ Diamantes ♣ Tréboles ♠ Espadas.</p>
+      <button class="button1">Iniciar Juego</button>
+    </section>
+    <section hidden>
+      <p>¡Empezamos! <span class="username"></span></p>
+      <p>Tu carta es: <span class="card">...</span></p>
+      <p>¿La siguiente carta será mayor o menor?</p>
+      <button class="button-option">Mayor</button>
+      <button class="button-option">Menor</button>
+    </section>
+    <section hidden>
+      <p>La carta inicial era <span class="card"></span></p>
+      <p class="message"></p>
+      <p class="info"></p>
+      <button class="button-next">Volver a jugar</button>
+      <button class="button-end">Terminar</button>
+    </section>
+    <section hidden>
+      <p>¡Seguimos! <span class="username"></span></p>
+      <p>Tu carta es: <span class="card">...</span></p>
+      <p>¿La siguiente carta será mayor o menor?</p>
+      <button class="button-option-2">Mayor</button>
+      <button class="button-option-2">Menor</button>
+    </section>
+    <section hidden>
+      <p>¡Juego terminado! <span class="username"></span></p>
+      <p class="end-cards" hidden>'Se acabaron las cartas!</p>
+      <p class="final-score"></p>
     </section>
   </body>
 </html>

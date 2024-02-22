@@ -110,67 +110,134 @@ export const game = () => {
     { symbol: "Tréboles", numero: "2", value: 2 },
     { symbol: "Espadas", numero: "2", value: 1 },
   ];
+  const cardsShort = [
+    { symbol: "Corazones", numero: "A", value: 52 },
+    { symbol: "Diamantes", numero: "A", value: 51 },
+    { symbol: "Tréboles", numero: "A", value: 50 },
+    { symbol: "Espadas", numero: "A", value: 49 },
 
-  let username = prompt(
-    `Bienvenido a nuestro juego de cartas! ♥ ♦ ♣ ♠.
-Inserta tu usuario!`
-  );
+    { symbol: "Corazones", numero: "K", value: 48 },
+    { symbol: "Diamantes", numero: "K", value: 47 },
+    { symbol: "Tréboles", numero: "K", value: 46 },
+    { symbol: "Espadas", numero: "K", value: 45 },
+  ];
 
-  // username === null
-  // username === ''
-  // username === 'any'
-
-  if (username === null) {
-    return alert("Gracias por visitarnos!");
-  }
-
-  if (!username || username === " ") {
-    username = "JUGADOR";
-  }
-  alert(`${username} Estas son las reglas: se te asignara una carta y  
-Tienes que adivinar si la siguiente es mayor o menor de la que tienes.
-Los valore desde el mas grande al mas pequeño van de:
-A, K, Q, J, 10, 9, 8 , 7, 6, 5, 4, 3, 2.
-♥ Corazones ♦ Diamantes ♣ Tréboles ♠ Espadas.`);
+  let username = "";
   let score = 0;
   let match = 0;
-  let playAgain = true;
-  while (playAgain === true) {
-    let userCard = takingCard(cards);
-    cards.splice(cards.indexOf(userCard), 1);
-    alert(`**${username}**
-Tu carta es ${userCard.numero} de ${userCard.symbol}`);
-    let CPU = takingCard(cards);
-    cards.splice(cards.indexOf(userCard), 1);
+  let openCard = "";
+  let closeCard = "";
 
-    do {
-      let option = prompt(
-        `${username} la siguiente carta es 'mayor' o 'menor'?`
-      ).toLowerCase();
+  const changeSection = (prev, next) => {
+    sections[prev].setAttribute("hidden", true);
+    sections[next].removeAttribute("hidden");
+  };
 
-      const { message, matchIncrement, scoreIncrement } = solveRound(
-        userCard,
-        CPU,
-        option,
-        username
+  const createRound = () => {
+    openCard = takingCard(cards);
+    cards.splice(cards.indexOf(openCard), 1);
+    document
+      .querySelectorAll(".card")
+      .forEach(
+        (element) =>
+          (element.innerHTML = `${openCard.numero} de ${openCard.symbol}`)
       );
-      score += scoreIncrement;
-      match += matchIncrement;
-      alert(message);
-      if (matchIncrement) {
-        break;
-      }
-    } while (true);
 
-    console.log("Cards left", cards.length);
-    if (!cards.length) {
-      alert("Se acabaron las cartas!");
-      break;
+    closeCard = takingCard(cards);
+    cards.splice(cards.indexOf(closeCard), 1);
+    console.log(openCard, closeCard);
+    console.log(cards.length);
+  };
+
+  const onSubmitForm1 = (event) => {
+    event.preventDefault();
+    username = event.target.elements[0].value;
+    username = username === " " ? "Jugador" : username;
+
+    sections[0].setAttribute("hidden", true);
+    sections[1].removeAttribute("hidden");
+    document
+      .querySelectorAll(".username")
+      .forEach((element) => (element.innerHTML = username));
+  };
+
+  const onClickButton1 = () => {
+    changeSection(1, 2);
+    createRound();
+  };
+
+  const onClickButtonOptions = (event) => {
+    const option = event.target.textContent.toLowerCase();
+    const { message, matchIncrement, scoreIncrement } = solveRound(
+      openCard,
+      closeCard,
+      option,
+      username
+    );
+    score += scoreIncrement;
+    match += matchIncrement;
+    changeSection(2, 3);
+    document.querySelector(".message").innerHTML = message;
+    document.querySelector(
+      ".info"
+    ).innerHTML = `De momento has jugado ${match} veces y ganado ${score} veces!`;
+  };
+
+  const onClickButtonNext = () => {
+    if (cards.length !== 0) {
+      changeSection(3, 4);
+      createRound();
+    } else {
+      changeSection(3, 5);
+      document.querySelector(
+        ".final-score"
+      ).innerHTML = `Has jugado ${match} vez y ganado ${score} vez!`;
+      document.querySelector(".end-cards").removeAttribute("hidden");
     }
-    playAgain = confirm(`${username} quieres jugar de nuevo?.
-De momento has jugado ${match} veces y ganado ${score} veces!`);
-  }
+  };
 
-  alert(`Gracias por haber jugado **${username}**
-Has jugado ${match} vez y ganado ${score} vez!`);
+  const onClickButtonOptions2 = (event) => {
+    const option = event.target.textContent.toLowerCase();
+    console.log("Option", option);
+    const { message, matchIncrement, scoreIncrement } = solveRound(
+      openCard,
+      closeCard,
+      option,
+      username
+    );
+    score += scoreIncrement;
+    match += matchIncrement;
+    changeSection(4, 3);
+    document.querySelector(".message").innerHTML = message;
+    document.querySelector(
+      ".info"
+    ).innerHTML = `De momento has jugado ${match} veces y ganado ${score} veces!`;
+  };
+
+  const onClickButtonEnd = () => {
+    changeSection(3, 5);
+    document.querySelector(
+      ".final-score"
+    ).innerHTML = `Has jugado ${match} vez y ganado ${score} vez!`;
+  };
+
+  const sections = document.querySelectorAll("section");
+  document.querySelector(".form1").addEventListener("submit", onSubmitForm1);
+  document.querySelector(".button1").addEventListener("click", onClickButton1);
+  document
+    .querySelectorAll(".button-option")
+    .forEach((element) =>
+      element.addEventListener("click", onClickButtonOptions)
+    );
+  document
+    .querySelector(".button-next")
+    .addEventListener("click", onClickButtonNext);
+  document
+    .querySelector(".button-end")
+    .addEventListener("click", onClickButtonEnd);
+  document
+    .querySelectorAll(".button-option-2")
+    .forEach((element) =>
+      element.addEventListener("click", onClickButtonOptions)
+    );
 };
